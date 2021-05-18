@@ -30,7 +30,17 @@ Estimate of time needed to complete: 1 hour
 
 Start time: 2 PM
 
-Finish time: _____
+Finish time: 2:35 PM
 
-Actual time needed to complete: _____
+Actual time needed to complete: 35 Minutes
+
+Name of feature: 2 - Map
+
+Estimate of time needed to complete: 1.5 hours
+
+Start time: 2:40 PM
+
+Finish time: 
+
+Actual time needed to complete: 
 

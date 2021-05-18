@@ -9,12 +9,11 @@ class RenderLocation extends React.Component {
 
   render() {
     return (
-      <div id="header">
+      <div id="body">
         {/* If there is a name to display, do it. If else, display nothing. */}
         <div>{this.props.location ? <p>{this.props.location}</p> : ''}</div>
-        <p>{console.log('yeee')}</p>
-        <p>Latitude: {this.props.lat}</p>
-        <p>Longitude: {this.props.lon}</p>
+        <div>{this.props.lat ? <p>{this.props.lat}</p> : ''}</div>
+        <div>{this.props.lon ? <p>{this.props.lon}</p> : ''}</div>
       </div>
     );
   }

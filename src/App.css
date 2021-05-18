@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.App #body {
+  background-color: rgb(193, 209, 224);
+  width: 500px;
+  margin: auto;
+  margin-top: 20px;
+} 
+
+.App img {
+  width: 500px;
+}
+
+.App #formInput {
+  width: 500px;
+  margin: auto;
+}
+
+.App #head {
+  background-color: rgb(85, 85, 124);
+  color: white;
+  margin: 20px;
+  padding: 10px;
+}

@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import RenderLocation from './RenderLocation.js';
 import RenderImage from './RenderImage.js';
+import Error from './Error.js';
+
 
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -11,14 +13,16 @@ import Button from 'react-bootstrap/Button';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-
 class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
       location: {},
-      img: ''
+      img: '',
+      error: undefined,
+      show: false,
+      id: 'here'
     }
   }
 
@@ -33,11 +37,25 @@ class SearchForm extends React.Component {
     this.setState({ location: locationObj }, () => console.log(this.state));
   }
 
-  fetchLocation = async (search) => {
-    let response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${API_KEY}&q=${search}&format=json`);
-    this.setLocation(response.data[0]);
-    this.fetchImage(response.data[0]);
-  }
+
+  fetchLocation = (search) => {
+
+    let response = axios.get(`https://us1.locationiq.com/v1/search.php?key=${API_KEY}&q=${search}&format=json`)
+
+    .then(response => {
+      this.setLocation(response.data[0]);
+      this.fetchImage(response.data[0]);
+      this.setState({error: ''});
+      this.setState({show: false})
+      
+    })
+    .catch(error => this.setState({error: error.toString()}, this.setState({show: true}), console.log(this.state.show)));
+
+  console.log(response);
+}
+
+
+
 
   fetchImage = async (place) => {
 
@@ -49,12 +67,15 @@ class SearchForm extends React.Component {
     return (
       <div id="header">
 
+<Error error={this.state.error} show={this.state.show} id={this.state.id}/>
+
+
       <Form>
         <Form.Group controlId="formInput">
           <Form.Label>Search For a City</Form.Label>
           <Form.Control onChange={(e) => this.setState({search: e.target.value})} type="text" placeholder="city" />
         </Form.Group>
-        <Button variant="danger" onClick={()=> this.fetchLocation(this.state.search)}>
+        <Button variant="danger" id="here" onClick={()=> this.fetchLocation(this.state.search)}>
           Explore!
         </Button>
       </Form>

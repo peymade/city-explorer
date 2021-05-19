@@ -5,6 +5,7 @@ import './App.css';
 import RenderLocation from './RenderLocation.js';
 import RenderImage from './RenderImage.js';
 import Error from './Error.js';
+import Weather from './Weather.js';
 
 
 import axios from 'axios';
@@ -21,10 +22,10 @@ class SearchForm extends React.Component {
       location: {},
       img: '',
       error: undefined,
-      show: false,
+      showError: false,
       id: 'error message',
       buttonId: '',
-      forecast: undefined
+      forecast: [],
     }
   }
 
@@ -43,12 +44,12 @@ class SearchForm extends React.Component {
       this.fetchImage(response.data[0]);
       this.getWeather(response.data[0]);
       this.setState({error: ''});
-      this.setState({show: false})
+      this.setState({showError: false})
       
     })
 
     // if there is an error, put it in state as a string, and set error show to be true
-    .catch(error => this.setState({error: error.toString()}, this.setState({show: true}), console.log(this.state.show)));
+    .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
 
   console.log(response);
 }
@@ -61,24 +62,28 @@ class SearchForm extends React.Component {
   }
 
 
-
-
   getWeather = (place) => {
 
-    console.log(place.lat)
+    console.log(place.lat);
+    let forecastArray = [];
 
-    let response = axios.get(`http://localhost:3030/weather?lat=${place.lat}&lon=${place.lon}&searchQuery=${place.display_name}
-    `)
+    let response = axios.get(`http://localhost:3030/weather?lat=${place.lat}&lon=${place.lon}&searchQuery=${place.display_name}`)
+
+
     .then(response => {
-      this.setState({forecast: response.data});
-      this.setState({error: ''});
-      this.setState({show: false});
 
-      console.log(this.state.forecast);
+      // Iterate through the data and for each object, access the data and description, add it to a new array
+      for(let i=0; i<16; i++){
+        forecastArray.push(`${response.data[0].date}: ${response.data[i].description}`)
+      };
+
+      this.setState({forecast: forecastArray});
+      this.setState({error: ''});
+      this.setState({showError: false});
     
     })
     // if there is an error, put it in state as a string, and set error show to be true
-    .catch(error => this.setState({error: error.toString()}, this.setState({show: true}), console.log(this.state.show)));
+    .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
 
   console.log(response);
 }
@@ -88,7 +93,7 @@ class SearchForm extends React.Component {
     return (
       <div id="header">
 
-      <Error error={this.state.error} show={this.state.show} id={this.state.id} buttonId={this.state.buttonId}/>
+      <Error error={this.state.error} showError={this.state.showError} id={this.state.id} buttonId={this.state.buttonId}/>
 
       <Form>
         <Form.Group controlId="formInput">
@@ -98,7 +103,6 @@ class SearchForm extends React.Component {
         <Button variant="danger" id="here" onClick={this.fetchLocation}>
           Explore!
         </Button>
-        <Button onClick={this.getShoppingList}>Get Shopping List!</Button>
 
       </Form>
 
@@ -106,6 +110,8 @@ class SearchForm extends React.Component {
         <RenderLocation location={this.state.location.display_name} lat={this.state.location.lat} lon={this.state.location.lon} img={this.state.img}/>
 
         <RenderImage img={this.state.img}/>
+
+        <Weather forecast={this.state.forecast}/>
 
       </div>
     );

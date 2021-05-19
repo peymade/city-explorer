@@ -59,3 +59,9 @@
   margin: 20px;
   padding: 10px;
 }
+
+.App .list {
+  background-color: rgb(193, 209, 224);
+  width: 500px;
+  margin: auto;
+}

@@ -15,6 +15,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
+const API_URL = process.env.REACT_APP_API_URL;
+console.log(API_URL)
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -25,17 +27,13 @@ class SearchForm extends React.Component {
       img: '',
       error: undefined,
       showError: false,
-      id: 'error message',
-      buttonId: '',
       forecast: [],
       movies: [],
     }
   }
 
   // Take what was submitted and make the request to axios
-  fetchLocation = (event) => {
-
-    this.setState({buttonId: event.target.id})
+  fetchLocation = () => {
 
     let searchFun = this.state.search
     let response = axios.get(`https://us1.locationiq.com/v1/search.php?key=${API_KEY}&q=${searchFun}&format=json`)
@@ -71,7 +69,7 @@ class SearchForm extends React.Component {
     console.log(this.state.search);
     let forecastArray = [];
 
-    let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/weather?lat=${place.lat}&lon=${place.lon}`)
+    let response = axios.get(`${API_URL}/weather?lat=${place.lat}&lon=${place.lon}`)
 
     .then(response => {
 
@@ -97,7 +95,7 @@ class SearchForm extends React.Component {
 
 getMovies = () => {
 
-  let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/movies?search=${this.state.search}`)
+  let response = axios.get(`${API_URL}/movies?search=${this.state.search}`)
 
   .then(response => {
 
@@ -121,7 +119,7 @@ console.log(response);
     return (
       <div id="header">
 
-      <Error error={this.state.error} showError={this.state.showError} id={this.state.id} buttonId={this.state.buttonId}/>
+      <Error error={this.state.error} showError={this.state.showError}/>
 
       <Form>
         <Form.Group controlId="formInput">

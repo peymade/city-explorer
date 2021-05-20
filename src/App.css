@@ -65,3 +65,25 @@
   width: 500px;
   margin: auto;
 }
+
+.App #carousel{
+  width: 500px;
+  margin: auto;
+}
+
+.App .item {
+  height: 750px;
+  width: 500px;
+}
+
+.App .caption {
+  background-color: rgb(58, 57, 57);
+  height: 200px;
+  width: 500px;
+  margin: auto;
+  overflow: scroll;
+  right: 0%;
+  left:0%;
+  margin-bottom: 20px;
+}
+

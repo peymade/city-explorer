@@ -71,7 +71,7 @@ class SearchForm extends React.Component {
     console.log(this.state.search);
     let forecastArray = [];
 
-    let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/weather?lat=${place.lat}&lon=${place.lon}&name=${this.state.search}`)
+    let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/weather?lat=${place.lat}&lon=${place.lon}`)
 
     .then(response => {
 

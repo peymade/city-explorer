@@ -6,6 +6,8 @@ import RenderLocation from './RenderLocation.js';
 import RenderImage from './RenderImage.js';
 import Error from './Error.js';
 import Weather from './Weather.js';
+import Movies from './Movies.js';
+
 
 
 import axios from 'axios';
@@ -26,6 +28,7 @@ class SearchForm extends React.Component {
       id: 'error message',
       buttonId: '',
       forecast: [],
+      movies: [],
     }
   }
 
@@ -43,6 +46,7 @@ class SearchForm extends React.Component {
       this.setState({location: location});
       this.fetchImage(response.data[0]);
       this.getWeather(response.data[0]);
+      this.getMovies(response.data[0]);
       this.setState({error: ''});
       this.setState({showError: false})
       
@@ -64,11 +68,10 @@ class SearchForm extends React.Component {
 
   getWeather = (place) => {
 
-    console.log(place.lat);
+    console.log(this.state.search);
     let forecastArray = [];
 
-    let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/weather?lat=${place.lat}&lon=${place.lon}&searchQuery=${place.display_name}`)
-
+    let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/weather?lat=${place.lat}&lon=${place.lon}&name=${this.state.search}`)
 
     .then(response => {
 
@@ -76,6 +79,8 @@ class SearchForm extends React.Component {
       for(let i=0; i<16; i++){
         forecastArray.push(`${response.data[0].date}: ${response.data[i].description}`)
       };
+      console.log(typeof(forecastArray));
+
 
       this.setState({forecast: forecastArray});
       this.setState({error: ''});
@@ -87,6 +92,29 @@ class SearchForm extends React.Component {
 
   console.log(response);
 }
+
+
+
+getMovies = () => {
+
+  let response = axios.get(`https://city-explorer-server-pm.herokuapp.com/movies?search=${this.state.search}`)
+
+  .then(response => {
+
+    // Iterate through the data and for each object, access the data and description, add it to a new array
+    console.log(response.data);
+
+    this.setState({movies: response.data});
+    this.setState({error: ''});
+    this.setState({showError: false});
+  
+  })
+  // if there is an error, put it in state as a string, and set error show to be true
+  .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
+
+console.log(response);
+}
+
 
 
   render() {
@@ -112,6 +140,8 @@ class SearchForm extends React.Component {
         <RenderImage img={this.state.img}/>
 
         <Weather forecast={this.state.forecast}/>
+
+        <Movies movies={this.state.movies}/>
 
       </div>
     );

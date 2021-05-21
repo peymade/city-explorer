@@ -32,6 +32,29 @@ class SearchForm extends React.Component {
     }
   }
 
+  handleError = (error) => {
+
+    if (this.state.showError === false){
+      this.setState({showError: true}); 
+      this.setState({error: error.toString()});
+      } else {
+      console.log(this.state.showError);
+    }
+  }
+
+  handleClick = () => {
+
+    // Call all the functions that should run when the Explore button is pressed
+    this.fetchLocation()
+
+    .then(()=>{
+      this.fetchImage(this.state.location);
+      this.getWeather(this.state.location);
+      this.getMovies(this.state.location);
+    })
+    .catch(error => this.handleError(error));
+  }
+
   // Take what was submitted and make the request to axios
   fetchLocation = () => {
 
@@ -40,20 +63,18 @@ class SearchForm extends React.Component {
 
     // set Location state, run function to make image URL, set error to no error, and set error show to false
     .then(response => {
-      let location = response.data[0];
-      this.setState({location: location});
-      this.fetchImage(response.data[0]);
-      this.getWeather(response.data[0]);
-      this.getMovies(response.data[0]);
-      this.setState({error: ''});
-      this.setState({showError: false})
-      
+      this.setState({
+        location: response.data[0],
+        error: '',
+        showError: false
+      });
     })
 
     // if there is an error, put it in state as a string, and set error show to be true
-    .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
+    .catch(error => this.handleError(error));
 
-  console.log(response);
+  //Return the data recieved from the call
+  return response;
 }
 
   // Take in the place object from axios and use the lat and lon to create an image URL
@@ -69,7 +90,7 @@ class SearchForm extends React.Component {
     console.log(this.state.search);
     let forecastArray = [];
 
-    let response = axios.get(`${API_URL}/weather?lat=${place.lat}&lon=${place.lon}`)
+    axios.get(`${API_URL}/weather?lat=${place.lat}&lon=${place.lon}`)
 
     .then(response => {
 
@@ -77,20 +98,15 @@ class SearchForm extends React.Component {
       for(let i=0; i<16; i++){
         forecastArray.push(`${response.data[0].date}: ${response.data[i].description}`)
       };
-      console.log(typeof(forecastArray));
-
-
       this.setState({forecast: forecastArray});
       this.setState({error: ''});
       this.setState({showError: false});
     
     })
     // if there is an error, put it in state as a string, and set error show to be true
-    .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
+    .catch(error => this.handleError(error));
 
-  console.log(response);
 }
-
 
 
 getMovies = () => {
@@ -108,12 +124,10 @@ getMovies = () => {
   
   })
   // if there is an error, put it in state as a string, and set error show to be true
-  .catch(error => this.setState({error: error.toString()}, this.setState({showError: true}), console.log(this.state.showError)));
+  .catch(error => this.handleError(error));
 
 console.log(response);
 }
-
-
 
   render() {
     return (
@@ -126,10 +140,9 @@ console.log(response);
           <Form.Label>Search For a City</Form.Label>
           <Form.Control onChange={(e) => this.setState({search: e.target.value})} type="text" placeholder="city" />
         </Form.Group>
-        <Button variant="danger" id="here" onClick={this.fetchLocation}>
+        <Button variant="danger" id="here" onClick={this.handleClick}>
           Explore!
         </Button>
-
       </Form>
 
         {/* Render the Location Data */}

@@ -63,3 +63,27 @@ Start time: 10 PM
 Finish time: 11:05 PM
 
 Actual time needed to complete: 1 hour
+
+## Feature Tracking
+
+### 5/20/2020
+
+Name of feature: 1
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 2 PM
+
+Finish time: 3:00 PM
+
+Actual time needed to complete: 1 hour
+
+Name of feature: 2 
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 4:00 PM
+
+Finish time: 6:30 PM
+
+Actual time needed to complete: 2.5 hours

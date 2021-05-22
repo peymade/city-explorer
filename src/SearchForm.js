@@ -94,6 +94,9 @@ class SearchForm extends React.Component {
 
     .then(response => {
 
+      console.log(response.data);
+
+
       // Iterate through the data and for each object, access the data and description, add it to a new array
       for(let i=0; i<16; i++){
         forecastArray.push(`${response.data[0].date}: ${response.data[i].description}`)
